@@ -1,0 +1,15 @@
+{
+  "name": "deity719-claude-skills",
+  "owner": {
+    "name": "dEitY719",
+    "url": "https://github.com/dEitY719"
+  },
+  "description": "A curated Claude Code skills marketplace maintained by dEitY719. Each plugin is an independently installable skill.",
+  "plugins": [
+    {
+      "name": "visualize",
+      "source": "./plugins/visualize",
+      "description": "Create beautiful, self-contained HTML visualizations (slides, infographics, dashboards, one-pagers) from any content."
+    }
+  ]
+}

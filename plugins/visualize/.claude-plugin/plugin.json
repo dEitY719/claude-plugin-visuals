@@ -1,0 +1,22 @@
+{
+  "name": "visualize",
+  "version": "0.3.2",
+  "description": "Create beautiful, self-contained HTML visualizations from any content or idea. Triggers on 'visualize this', 'make a deck', 'create a slide', 'build an infographic', 'show me a dashboard'.",
+  "author": {
+    "name": "careerhackeralex",
+    "note": "Original skill author"
+  },
+  "maintainer": {
+    "name": "dEitY719",
+    "url": "https://github.com/dEitY719"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/dEitY719/claude-skills",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dEitY719/claude-skills.git",
+    "directory": "plugins/visualize"
+  },
+  "keywords": ["visualization", "html", "slides", "dashboard", "infographic", "presentation"],
+  "category": "document-creation"
+}
