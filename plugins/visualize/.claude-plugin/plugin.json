@@ -12,11 +12,7 @@
   },
   "license": "MIT",
   "homepage": "https://github.com/dEitY719/claude-skills",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/dEitY719/claude-skills.git",
-    "directory": "plugins/visualize"
-  },
+  "repository": "https://github.com/dEitY719/claude-skills.git",
   "keywords": ["visualization", "html", "slides", "dashboard", "infographic", "presentation"],
   "category": "document-creation"
 }
