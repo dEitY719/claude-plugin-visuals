@@ -1,10 +1,10 @@
 {
   "name": "visualize",
-  "version": "0.3.2",
-  "description": "Create beautiful, self-contained HTML visualizations from any content or idea. Triggers on 'visualize this', 'make a deck', 'create a slide', 'build an infographic', 'show me a dashboard'.",
+  "version": "0.4.0",
+  "description": "Create beautiful, self-contained HTML visualizations and Excalidraw diagrams from any content or idea. Bundles the 'visualize' (HTML decks/dashboards/infographics) and 'excalidraw-diagram' (architecture/concept diagrams) skills.",
   "author": {
-    "name": "careerhackeralex",
-    "note": "Original skill author"
+    "name": "careerhackeralex / coleam00",
+    "note": "Original skill authors — visualize by careerhackeralex, excalidraw-diagram by coleam00"
   },
   "maintainer": {
     "name": "dEitY719",
@@ -13,6 +13,16 @@
   "license": "MIT",
   "homepage": "https://github.com/dEitY719/claude-skills",
   "repository": "https://github.com/dEitY719/claude-skills.git",
-  "keywords": ["visualization", "html", "slides", "dashboard", "infographic", "presentation"],
+  "keywords": [
+    "visualization",
+    "html",
+    "slides",
+    "dashboard",
+    "infographic",
+    "presentation",
+    "excalidraw",
+    "diagram",
+    "architecture-diagram"
+  ],
   "category": "document-creation"
 }
