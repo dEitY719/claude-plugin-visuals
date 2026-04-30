@@ -9,7 +9,7 @@
     {
       "name": "visualize",
       "source": "./plugins/visualize",
-      "description": "Create beautiful, self-contained HTML visualizations (slides, infographics, dashboards, one-pagers) from any content."
+      "description": "HTML visualizations (slides, infographics, dashboards, one-pagers) plus Excalidraw architecture/concept diagrams. Bundles the 'visualize' and 'excalidraw-diagram' skills."
     }
   ]
 }

@@ -31,7 +31,7 @@ To remove:
 
 | Plugin | Description | Version |
 |--------|-------------|---------|
-| [`visualize`](./plugins/visualize) | Create self-contained HTML visualizations — slide decks, infographics, dashboards, one-pagers, flowcharts, timelines | `0.3.2` |
+| [`visualize`](./plugins/visualize) | Bundles two skills: **`visualize`** (self-contained HTML — slide decks, infographics, dashboards, one-pagers) and **`excalidraw-diagram`** (Excalidraw architecture/concept diagrams that argue visually). See [excalidraw-diagram README](./plugins/visualize/skills/excalidraw-diagram/README.md) for the VSCode extension setup. | `0.4.0` |
 
 ## Repository structure
 
@@ -62,6 +62,7 @@ claude-skills/
 ## Credits
 
 - `visualize` — original skill by [careerhackeralex](https://github.com/careerhackeralex), MIT licensed. Repackaged here for easier colleague distribution.
+- `excalidraw-diagram` — original skill by [coleam00](https://github.com/coleam00/excalidraw-diagram-skill), MIT licensed. Bundled inside the `visualize` plugin.
 
 ## License
 
