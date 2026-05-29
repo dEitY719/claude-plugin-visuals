@@ -1,4 +1,4 @@
-# claude-skills
+# claude-plugin-visuals
 
 A [Claude Code](https://docs.claude.com/en/docs/claude-code) skills marketplace by [@dEitY719](https://github.com/dEitY719). Each plugin installs independently — pick what you need.
 
@@ -7,7 +7,7 @@ A [Claude Code](https://docs.claude.com/en/docs/claude-code) skills marketplace 
 In a Claude Code session:
 
 ```
-/plugin marketplace add dEitY719/claude-skills
+/plugin marketplace add dEitY719/claude-plugin-visuals
 /plugin install visuals
 ```
 

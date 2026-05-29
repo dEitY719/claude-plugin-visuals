@@ -2,7 +2,7 @@
 
 A Claude Code skill that generates beautiful, practical Excalidraw diagrams from natural language descriptions. Not just boxes-and-arrows — diagrams that **argue visually**.
 
-This skill is shipped as part of the [`visuals`](../../) plugin in the [`dEitY719/claude-skills`](https://github.com/dEitY719/claude-skills) marketplace.
+This skill is shipped as part of the [`visuals`](../../) plugin in the [`dEitY719/claude-plugin-visuals`](https://github.com/dEitY719/claude-plugin-visuals) marketplace.
 
 ## What Makes This Different
 
@@ -22,7 +22,7 @@ This skill is bundled inside the **`visuals`** plugin. You install the plugin on
 Inside a Claude Code session:
 
 ```
-/plugin marketplace add dEitY719/claude-skills
+/plugin marketplace add dEitY719/claude-plugin-visuals
 /plugin install visuals
 ```
 
