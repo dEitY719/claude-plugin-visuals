@@ -8,16 +8,16 @@ In a Claude Code session:
 
 ```
 /plugin marketplace add dEitY719/claude-skills
-/plugin install visualize
+/plugin install visuals
 ```
 
-Update with `/plugin update visualize`, remove with `/plugin uninstall visualize`.
+Update with `/plugin update visuals`, remove with `/plugin uninstall visuals`.
 
 ## Available plugins
 
 | Plugin | Description | Version |
 |--------|-------------|---------|
-| [`visualize`](./plugins/visualize) | Two skills: **`visualize`** (self-contained HTML decks, infographics, dashboards) and **`excalidraw-diagram`** (Excalidraw architecture/concept diagrams). See its [README](./plugins/visualize/skills/excalidraw-diagram/README.md) for VSCode setup. | `0.4.0` |
+| [`visuals`](./plugins/visuals) | Two skills: **`visualize`** (self-contained HTML decks, infographics, dashboards) and **`excalidraw-diagram`** (Excalidraw architecture/concept diagrams). See its [README](./plugins/visuals/skills/excalidraw-diagram/README.md) for VSCode setup. | `0.4.0` |
 
 ## Repository structure
 

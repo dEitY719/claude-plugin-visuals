@@ -7,8 +7,8 @@
   "description": "A curated Claude Code skills marketplace maintained by dEitY719. Each plugin is an independently installable skill.",
   "plugins": [
     {
-      "name": "visualize",
-      "source": "./plugins/visualize",
+      "name": "visuals",
+      "source": "./plugins/visuals",
       "description": "HTML visualizations (slides, infographics, dashboards, one-pagers) plus Excalidraw architecture/concept diagrams. Bundles the 'visualize' and 'excalidraw-diagram' skills."
     }
   ]
