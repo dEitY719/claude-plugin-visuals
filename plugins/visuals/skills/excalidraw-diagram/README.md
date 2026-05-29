@@ -2,7 +2,7 @@
 
 A Claude Code skill that generates beautiful, practical Excalidraw diagrams from natural language descriptions. Not just boxes-and-arrows — diagrams that **argue visually**.
 
-This skill is shipped as part of the [`visualize`](../../) plugin in the [`dEitY719/claude-skills`](https://github.com/dEitY719/claude-skills) marketplace.
+This skill is shipped as part of the [`visuals`](../../) plugin in the [`dEitY719/claude-skills`](https://github.com/dEitY719/claude-skills) marketplace.
 
 ## What Makes This Different
 
@@ -15,7 +15,7 @@ This skill is shipped as part of the [`visualize`](../../) plugin in the [`dEitY
 
 ## Installation (for colleagues)
 
-This skill is bundled inside the **`visualize`** plugin. You install the plugin once, and both `visualize` and `excalidraw-diagram` skills become available.
+This skill is bundled inside the **`visuals`** plugin. You install the plugin once, and both `visualize` and `excalidraw-diagram` skills become available.
 
 ### 1. Add the marketplace and install the plugin
 
@@ -23,7 +23,7 @@ Inside a Claude Code session:
 
 ```
 /plugin marketplace add dEitY719/claude-skills
-/plugin install visualize
+/plugin install visuals
 ```
 
 Verify both skills are registered:
@@ -32,7 +32,7 @@ Verify both skills are registered:
 /plugin list
 ```
 
-You should see `visualize` listed, and the bundled skills `visualize` and `excalidraw-diagram` will be discoverable by Claude.
+You should see `visuals` listed, and the bundled skills `visualize` and `excalidraw-diagram` will be discoverable by Claude.
 
 ### 2. Install the VSCode Excalidraw extension (required)
 
@@ -62,7 +62,7 @@ Claude will run the commands for you.
 **Option B — Manual:**
 
 ```bash
-cd ~/.claude/plugins/visualize/skills/excalidraw-diagram   # adjust if different
+cd ~/.claude/plugins/visuals/skills/excalidraw-diagram   # adjust if different
 uv sync
 cd references && uv run playwright install chromium
 ```
@@ -72,8 +72,8 @@ This installs `playwright` and a headless Chromium browser (~200MB). It only nee
 ### 4. Updating or removing
 
 ```
-/plugin update visualize
-/plugin uninstall visualize
+/plugin update visuals
+/plugin uninstall visuals
 ```
 
 ---
@@ -147,7 +147,7 @@ Edit `references/color-palette.md` inside the skill directory to change brand co
 | `.excalidraw` opens as raw JSON in VSCode | Install the [Excalidraw extension](https://marketplace.visualstudio.com/items?itemName=pomdtr.excalidraw-editor). |
 | `uv: command not found` during setup | Install [uv](https://docs.astral.sh/uv/getting-started/installation/) first: `curl -LsSf https://astral.sh/uv/install.sh \| sh`. |
 | Playwright fails to launch Chromium | Re-run `uv run playwright install chromium`. On Linux you may also need `uv run playwright install-deps`. |
-| Skill not auto-triggering | Confirm with `/plugin list` that `visualize` is installed; restart your Claude Code session if it was just added. |
+| Skill not auto-triggering | Confirm with `/plugin list` that `visuals` is installed; restart your Claude Code session if it was just added. |
 | Diagram looks like generic boxes | Tell the agent to "use varied visual patterns — fan-out, convergence, timeline — not a uniform grid." The skill is designed to argue visually; nudge it if it falls back to defaults. |
 
 ---
@@ -179,7 +179,7 @@ excalidraw-diagram/
 ## Credits
 
 - Original skill: [coleam00/excalidraw-diagram-skill](https://github.com/coleam00/excalidraw-diagram-skill), MIT licensed.
-- Repackaged for the `visualize` Claude Code plugin marketplace by [@dEitY719](https://github.com/dEitY719).
+- Repackaged for the `visuals` Claude Code plugin marketplace by [@dEitY719](https://github.com/dEitY719).
 
 ## License
 
