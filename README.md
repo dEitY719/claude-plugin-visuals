@@ -13,6 +13,14 @@ In a Claude Code session:
 
 Update with `/plugin update visuals`, remove with `/plugin uninstall visuals`.
 
+### From the shell (npx)
+
+To install the skills from your terminal — works with Claude, Codex, Gemini, and opencode:
+
+```
+npx skills add https://github.com/dEitY719/claude-plugin-visuals
+```
+
 ## Available plugins
 
 | Plugin | Description | Version |
