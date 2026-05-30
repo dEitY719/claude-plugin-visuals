@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visualize — Skill Reference</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { interpolate-size: allow-keywords; }
+
+    /* ===== THEMES (class-based ONLY) ===== */
+    html.theme-dark {
+      --bg: #0A0A0A; --surface: #141414; --surface-hover: #1C1C1C;
+      --border: rgba(255,255,255,0.07);
+      --text: #EDEDED; --text-secondary: #888;
+      --accent: #3b82f6; --accent-secondary: #8b5cf6;
+      --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
+      --code-bg: #1a1a1a;
+    }
+    html.theme-light {
+      --bg: #FAFAF9; --surface: #FFFFFF; --surface-hover: #F5F5F4;
+      --border: rgba(0,0,0,0.08);
+      --text: #0f172a; --text-secondary: #64748b;
+      --accent: #2563eb; --accent-secondary: #7c3aed;
+      --positive: #059669; --negative: #e11d48; --warning: #d97706;
+      --code-bg: #f1f5f9;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg); color: var(--text);
+      line-height: 1.6; -webkit-font-smoothing: antialiased;
+      letter-spacing: -0.01em; font-feature-settings: 'cv11', 'ss01';
+      transition: background 0.3s, color 0.3s;
+      scrollbar-gutter: stable;
+    }
+    h1,h2,h3,h4,h5,h6 { color: var(--text); letter-spacing: -0.03em; line-height: 1.1; text-wrap: balance; }
+    h1 { font-weight: 800; font-size: clamp(2.6rem, 6vw, 4rem); }
+    h2 { font-weight: 700; font-size: clamp(1.8rem, 4vw, 2.4rem); }
+    h3 { font-weight: 600; font-size: 1.5rem; }
+    body, p, li, td, th, span, label { font-weight: 400; }
+    p,li,td,th,span,label { color: var(--text); }
+    .text-secondary { color: var(--text-secondary); }
+    code, .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+    a { color: var(--accent); }
+
+    main#page { max-width: 1140px; margin: 0 auto; padding: 0 24px 100px; }
+    section { padding: 56px 0 8px; }
+
+    /* ===== HERO ===== */
+    .hero { padding: 88px 0 40px; text-align: center; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 6px 14px; border-radius: 999px; font-size: 0.8rem;
+      font-weight: 600; color: var(--text-secondary); margin-bottom: 24px;
+      letter-spacing: 0.02em;
+    }
+    .badge .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--positive); }
+    .hero h1 { background: linear-gradient(120deg, var(--accent), var(--accent-secondary)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero .lede { font-size: clamp(1.1rem, 2.5vw, 1.4rem); color: var(--text-secondary); max-width: 680px; margin: 22px auto 0; font-weight: 400; }
+    .meta-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 30px; }
+    .pill { font-size: 0.8rem; font-weight: 500; color: var(--text-secondary); background: var(--surface); border: 1px solid var(--border); padding: 6px 13px; border-radius: 8px; }
+    .pill strong { color: var(--text); font-weight: 600; }
+
+    /* ===== SECTION HEADERS ===== */
+    .sec-head { display: flex; align-items: center; gap: 14px; margin-bottom: 8px; }
+    .sec-num { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight: 600; color: var(--accent); border: 1px solid var(--border); background: var(--surface); border-radius: 8px; padding: 4px 10px; }
+    .sec-sub { color: var(--text-secondary); font-size: 1.05rem; margin-top: 6px; margin-bottom: 28px; max-width: 720px; }
+
+    /* ===== CARD ===== */
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 24px;
+      transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+    }
+    .card:hover { box-shadow: 0 0 0 1px var(--border), 0 12px 28px rgba(0,0,0,0.10); transform: translateY(-3px); }
+
+    .grid { display: grid; gap: 18px; }
+    .grid-2 { grid-template-columns: repeat(2, 1fr); }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    @media (max-width: 860px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+    /* ===== CRITICAL REQ CARDS ===== */
+    .req-card { position: relative; padding-left: 24px; overflow: hidden; }
+    .req-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--negative); }
+    .req-card .rnum { font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--negative); font-size: 0.85rem; }
+    .req-card h4 { font-size: 1.12rem; font-weight: 700; margin: 6px 0 8px; }
+    .req-card p { font-size: 0.93rem; color: var(--text-secondary); line-height: 1.55; }
+    .req-card code { font-size: 0.82rem; background: var(--code-bg); padding: 1px 6px; border-radius: 5px; color: var(--text); white-space: nowrap; }
+    .tag-critical { display: inline-block; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--warning); border: 1px solid var(--warning); border-radius: 5px; padding: 1px 6px; margin-top: 10px; }
+
+    .warn-banner {
+      display: flex; gap: 16px; align-items: flex-start;
+      background: color-mix(in srgb, var(--negative) 9%, var(--surface));
+      border: 1px solid color-mix(in srgb, var(--negative) 35%, var(--border));
+      border-radius: 14px; padding: 20px 24px; margin-bottom: 30px;
+    }
+    .warn-banner .ico { font-size: 1.6rem; line-height: 1; }
+    .warn-banner strong { color: var(--negative); }
+
+    /* ===== PRINCIPLES ===== */
+    .principle h4 { display: flex; align-items: center; gap: 10px; font-size: 1.08rem; font-weight: 700; margin-bottom: 6px; }
+    .principle .pico { width: 34px; height: 34px; flex-shrink: 0; border-radius: 9px; display: grid; place-items: center; background: color-mix(in srgb, var(--accent) 14%, transparent); }
+    .principle p { font-size: 0.9rem; color: var(--text-secondary); }
+    svg.i { width: 18px; height: 18px; stroke: var(--accent); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* ===== PROCESS TIMELINE ===== */
+    .steps { display: grid; gap: 0; }
+    .step { display: grid; grid-template-columns: 56px 1fr; gap: 18px; padding-bottom: 26px; position: relative; }
+    .step:not(:last-child)::before { content: ''; position: absolute; left: 27px; top: 48px; bottom: 0; width: 2px; background: var(--border); }
+    .step .sdot { width: 48px; height: 48px; border-radius: 50%; background: var(--surface); border: 2px solid var(--accent); color: var(--accent); display: grid; place-items: center; font-weight: 700; font-family: 'JetBrains Mono', monospace; z-index: 1; }
+    .step h4 { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+    .step p { color: var(--text-secondary); font-size: 0.93rem; }
+
+    /* ===== TYPES CHIPS ===== */
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+    .chip { background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 8px 16px; font-size: 0.88rem; font-weight: 500; transition: all 0.18s; }
+    .chip:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+    /* ===== OUTPUT RULES LIST ===== */
+    .rule-list { list-style: none; display: grid; gap: 14px; }
+    .rule-list li { display: flex; gap: 14px; align-items: flex-start; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+    .rule-list .k { font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--accent-secondary); flex-shrink: 0; font-size: 0.9rem; }
+    .rule-list .v { font-size: 0.93rem; }
+    .rule-list code { background: var(--code-bg); padding: 1px 6px; border-radius: 5px; font-size: 0.82rem; }
+
+    /* ===== DESIGN SYSTEM SWATCHES ===== */
+    .vars { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .swatch { display: flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px 6px 6px; }
+    .swatch i { width: 22px; height: 22px; border-radius: 6px; display: block; border: 1px solid var(--border); }
+
+    .callout { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 12px; padding: 20px 24px; }
+    .callout p { color: var(--text-secondary); font-size: 0.95rem; }
+
+    footer { text-align: center; padding: 60px 0 0; color: var(--text-secondary); font-size: 0.85rem; }
+    footer code { background: var(--code-bg); padding: 2px 7px; border-radius: 5px; }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    .animate { animation: fadeInUp 0.6s ease-out both; }
+    .animate.delay-1 { animation-delay: 0.08s; }
+    .animate.delay-2 { animation-delay: 0.16s; }
+    .animate.delay-3 { animation-delay: 0.24s; }
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+
+    /* ===== PRINT ===== */
+    @media print {
+      body { background: white !important; color: black !important; }
+      .viz-menu, .reveal { display: revert; opacity: 1 !important; transform: none !important; }
+      .card, .rule-list li { break-inside: avoid; border: 1px solid #ddd; box-shadow: none; }
+      * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+    @page { margin: 1in; @bottom-center { content: "Page " counter(page); font-size: 9pt; color: #666; } }
+
+    /* ===== MENU ===== */
+    .viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9999; }
+    .viz-menu-toggle { width: 44px; height: 44px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); color: var(--text); cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(12px); transition: all 0.2s; }
+    .viz-menu-toggle:hover { background: var(--surface-hover); }
+    .viz-menu-dropdown { position: absolute; top: 52px; right: 0; min-width: 200px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 8px; opacity: 0; visibility: hidden; transform: translateY(-8px); transition: all 0.2s; backdrop-filter: blur(16px); box-shadow: 0 8px 32px rgba(0,0,0,0.15); }
+    .viz-menu-dropdown.open { opacity: 1; visibility: visible; transform: translateY(0); }
+    .viz-menu-dropdown button { width: 100%; padding: 10px 14px; border: none; border-radius: 8px; background: transparent; color: var(--text); font-size: 14px; font-family: inherit; cursor: pointer; text-align: left; display: flex; align-items: center; gap: 10px; transition: background 0.15s; }
+    .viz-menu-dropdown button:hover { background: var(--surface-hover); }
+
+    .skip-to-content { position: absolute; top: -40px; left: 6px; background: var(--accent); color: white; padding: 8px 12px; text-decoration: none; border-radius: 4px; opacity: 0; pointer-events: none; transition: all 0.2s; z-index: 10000; }
+    .skip-to-content:focus { top: 6px; opacity: 1; pointer-events: auto; }
+  </style>
+</head>
+<body>
+  <!-- MENU -->
+  <div class="viz-menu">
+    <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="Open utility menu">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/>
+      </svg>
+    </button>
+    <div class="viz-menu-dropdown" id="vizMenuDropdown">
+      <button onclick="cycleTheme()" aria-label="Toggle theme"><span id="themeIcon">☀️</span><span id="themeLabel">Light</span></button>
+      <button onclick="downloadImage()" aria-label="Download PNG"><span>📥</span><span>Download PNG</span></button>
+      <button onclick="window.print()" aria-label="Print or save PDF"><span>🖨️</span><span>Print / PDF</span></button>
+    </div>
+  </div>
+
+  <a href="#main-content" class="skip-to-content">Skip to content</a>
+
+  <main id="main-content" role="main">
+  <div id="page-wrap">
+  <main id="page">
+
+    <!-- HERO -->
+    <header class="hero">
+      <div class="badge animate"><span class="dot"></span>SKILL.md &nbsp;·&nbsp; v0.3.2 &nbsp;·&nbsp; MIT</div>
+      <h1 class="animate delay-1">Visualize</h1>
+      <p class="lede animate delay-2">Turn any idea, data, or content into a stunning single-file HTML visualization.</p>
+      <div class="meta-row animate delay-3">
+        <span class="pill"><strong>Author</strong> careerhackeralex</span>
+        <span class="pill"><strong>Category</strong> document-creation</span>
+        <span class="pill"><strong>Tags</strong> visualization · html · slides · dashboard · infographic</span>
+      </div>
+    </header>
+
+    <!-- CRITICAL REQUIREMENTS -->
+    <section data-reveal>
+      <div class="sec-head"><span class="sec-num">01</span><h2>Critical Requirements</h2></div>
+      <p class="sec-sub">Non-negotiable. Each visualization must include every one of these — always start from <code>references/skeleton.md</code>.</p>
+
+      <div class="warn-banner">
+        <span class="ico">⚠️</span>
+        <div>
+          <strong>Evaluation failure guaranteed without these elements.</strong>
+          <p class="text-secondary" style="margin-top:4px; font-size:0.92rem;">Copy skeleton → replace “YOUR CONTENT HERE” → save file. Never write HTML from scratch.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-3">
+        <div class="card req-card">
+          <span class="rnum">01</span>
+          <h4>CSS Custom Properties</h4>
+          <p>Exact names required: <code>--bg</code>, <code>--surface</code>, <code>--surface-hover</code>, <code>--border</code>, <code>--text</code>, <code>--text-secondary</code>, <code>--accent</code>, <code>--accent-secondary</code>, <code>--positive</code>, <code>--negative</code>, <code>--warning</code>.</p>
+        </div>
+        <div class="card req-card">
+          <span class="rnum">02</span>
+          <h4>Utility Menu</h4>
+          <p><code>.viz-menu</code> with toggle + dropdown: download PNG (<code>downloadImage()</code>), print (<code>window.print()</code>), and the html-to-image CDN script.</p>
+        </div>
+        <div class="card req-card">
+          <span class="rnum">03</span>
+          <h4>Theme Classes</h4>
+          <p>Define <strong>both</strong> <code>.theme-light</code> and <code>.theme-dark</code> in the stylesheet — class-based only, never <code>@media prefers-color-scheme</code>.</p>
+          <span class="tag-critical">Evaluation Critical</span>
+        </div>
+        <div class="card req-card">
+          <span class="rnum">04</span>
+          <h4>Semantic HTML</h4>
+          <p><code>&lt;main id="main-content"&gt;</code>, multiple <code>&lt;section&gt;</code> elements, and a skip-to-content link.</p>
+        </div>
+        <div class="card req-card">
+          <span class="rnum">05</span>
+          <h4>Chart.js (charts only)</h4>
+          <p>CDN before <code>&lt;/head&gt;</code>, <code>Chart.defaults.animation = false;</code> immediately after, ChartManager pattern preferred.</p>
+          <span class="tag-critical">Evaluation Critical</span>
+        </div>
+        <div class="card req-card">
+          <span class="rnum">06</span>
+          <h4>Responsive Design</h4>
+          <p>No horizontal overflow at 375px. Font hierarchy: <code>h1 ≥ 3rem</code>, <code>h2 ≥ 2rem</code>, <code>h3 ≥ 1.5rem</code>, body = 1rem.</p>
+        </div>
+        <div class="card req-card">
+          <span class="rnum">07</span>
+          <h4>Print &amp; Accessibility</h4>
+          <p><code>@media print</code>, <code>@media (prefers-reduced-motion: reduce)</code>, and aria-labels on all interactive elements and charts.</p>
+        </div>
+        <div class="card req-card">
+          <span class="rnum">08</span>
+          <h4>Entrance Animations</h4>
+          <p><code>.animate</code> classes or <code>data-reveal</code> — evaluation detects and requires animation presence.</p>
+        </div>
+        <div class="card req-card">
+          <span class="rnum">09</span>
+          <h4>JavaScript</h4>
+          <p><code>cycleTheme()</code>, <code>toggleMenu()</code>, and all top-level vars use <code>var</code> (never <code>let</code>/<code>const</code> — avoids TDZ errors with CDN libs).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CORE PRINCIPLES -->
+    <section data-reveal>
+      <div class="sec-head"><span class="sec-num">02</span><h2>Core Principles</h2></div>
+      <p class="sec-sub">Six guardrails that keep every output professional, portable, and content-first.</p>
+      <div class="grid grid-3">
+        <div class="card principle">
+          <h4><span class="pico"><svg class="i" viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 9h16"/></svg></span>Single-file HTML</h4>
+          <p>One <code>.html</code> file, inline CSS/JS, opens anywhere, works offline.</p>
+        </div>
+        <div class="card principle">
+          <h4><span class="pico"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2"/></svg></span>Light-theme optimized</h4>
+          <p>Modern designs prioritize light mode. Dark available via toggle.</p>
+        </div>
+        <div class="card principle">
+          <h4><span class="pico"><svg class="i" viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6 4.4 2.3 7.2L12 16.6 5.7 21l2.3-7.2-6-4.4h7.6z"/></svg></span>Beautiful by default</h4>
+          <p>First output looks professional with zero iteration.</p>
+        </div>
+        <div class="card principle">
+          <h4><span class="pico"><svg class="i" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg></span>Content-first</h4>
+          <p>Visualization serves the message. Never sacrifice clarity for aesthetics.</p>
+        </div>
+        <div class="card principle">
+          <h4><span class="pico"><svg class="i" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></span>Responsive</h4>
+          <p>Works on desktop, tablet, mobile unless explicitly fixed-dimension.</p>
+        </div>
+        <div class="card principle">
+          <h4><span class="pico"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></svg></span>Visual restraint</h4>
+          <p>No floating gradient orbs, rainbow borders, or ornamental animations.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISUALIZATION TYPES -->
+    <section data-reveal>
+      <div class="sec-head"><span class="sec-num">03</span><h2>Visualization Types</h2></div>
+      <p class="sec-sub">Choose the right format. When content arrives without a specified format: analyze → recommend 1–2 formats → wait for confirmation.</p>
+      <div class="chips">
+        <span class="chip">Slide deck</span>
+        <span class="chip">Presentation</span>
+        <span class="chip">Infographic</span>
+        <span class="chip">Dashboard</span>
+        <span class="chip">Flowchart</span>
+        <span class="chip">Diagram</span>
+        <span class="chip">Timeline</span>
+        <span class="chip">Comparison table</span>
+        <span class="chip">Data visualization</span>
+        <span class="chip">Landing page</span>
+        <span class="chip">One-pager</span>
+        <span class="chip">Org chart</span>
+        <span class="chip">Mind map</span>
+        <span class="chip">Process flow</span>
+        <span class="chip">Kanban board</span>
+        <span class="chip">Report summary</span>
+        <span class="chip">Carousel</span>
+        <span class="chip">Poster</span>
+      </div>
+    </section>
+
+    <!-- OUTPUT RULES -->
+    <section data-reveal>
+      <div class="sec-head"><span class="sec-num">04</span><h2>Output Rules</h2></div>
+      <p class="sec-sub">Always start from the skeleton — never write HTML from scratch. Write exactly one <code>.html</code> file.</p>
+      <ul class="rule-list">
+        <li><span class="k">File input</span><span class="v"><code>/visualize /path/abc.md</code> → same directory, same basename, <code>.html</code> extension.</span></li>
+        <li><span class="k">No input</span><span class="v">Save to <code>~/Downloads/</code> with a descriptive kebab-case name.</span></li>
+        <li><span class="k">User path</span><span class="v">A user-specified output path is always honored.</span></li>
+        <li><span class="k">Graphics</span><span class="v">SVG for icons and simple graphics — never external image URLs unless the user provides them.</span></li>
+      </ul>
+    </section>
+
+    <!-- DESIGN SYSTEM -->
+    <section data-reveal>
+      <div class="sec-head"><span class="sec-num">05</span><h2>Design System</h2></div>
+      <p class="sec-sub">Inter font mandatory · class-based theming only · minimum CSS variables below.</p>
+      <div class="grid grid-2">
+        <div class="card">
+          <h3 style="margin-bottom:10px;">Minimum CSS variables</h3>
+          <p class="text-secondary" style="font-size:0.92rem;">The core palette every visualization defines, available in both themes.</p>
+          <div class="vars">
+            <span class="swatch"><i style="background:var(--bg)"></i>--bg</span>
+            <span class="swatch"><i style="background:var(--surface)"></i>--surface</span>
+            <span class="swatch"><i style="background:var(--text)"></i>--text</span>
+            <span class="swatch"><i style="background:var(--accent)"></i>--accent</span>
+            <span class="swatch"><i style="background:var(--accent-secondary)"></i>--accent-secondary</span>
+            <span class="swatch"><i style="background:var(--positive)"></i>--positive</span>
+            <span class="swatch"><i style="background:var(--negative)"></i>--negative</span>
+            <span class="swatch"><i style="background:var(--warning)"></i>--warning</span>
+          </div>
+        </div>
+        <div class="card">
+          <h3 style="margin-bottom:10px;">Auto-open &amp; return</h3>
+          <p class="text-secondary" style="font-size:0.92rem; margin-bottom:14px;">After writing the file, always do both:</p>
+          <ul class="rule-list" style="gap:10px;">
+            <li><span class="k">1</span><span class="v">Auto-open: <code>wslview</code> · <code>xdg-open</code> · <code>open</code> the <code>.html</code> file.</span></li>
+            <li><span class="k">2</span><span class="v">Return URL: include <code>file://&lt;absolute-path&gt;</code> in the response.</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTEXT AWARENESS -->
+    <section data-reveal>
+      <div class="sec-head"><span class="sec-num">06</span><h2>Context Awareness</h2></div>
+      <div class="callout">
+        <p>This skill runs mid-conversation. Use all available context — conversation history, URLs (crawl + extract), pasted data (CSV/JSON → charts), code/architecture (→ system diagrams). <strong style="color:var(--text)">Always use real content — never placeholder data.</strong></p>
+      </div>
+    </section>
+
+    <!-- PROCESS -->
+    <section data-reveal>
+      <div class="sec-head"><span class="sec-num">07</span><h2>Process</h2></div>
+      <p class="sec-sub">Five steps from intent to verified output.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="sdot">1</div>
+          <div><h4>Understand</h4><p>Clarify message, audience, and format. If format is unclear, run Auto-Recommend.</p></div>
+        </div>
+        <div class="step">
+          <div class="sdot">2</div>
+          <div><h4>Start from skeleton</h4><p>Open <code>references/skeleton.md</code>. Never start blank.</p></div>
+        </div>
+        <div class="step">
+          <div class="sdot">3</div>
+          <div><h4>Structure</h4><p>Outline the sections before filling the skeleton.</p></div>
+        </div>
+        <div class="step">
+          <div class="sdot">4</div>
+          <div><h4>Build</h4><p>Add content, charts, and styles. All colors as CSS variables.</p></div>
+        </div>
+        <div class="step">
+          <div class="sdot">5</div>
+          <div><h4>Verify</h4><p>Run <code>references/checklist.md</code> before outputting.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>Generated from <code>plugins/visuals/skills/visualize/SKILL.md</code> · careerhackeralex · MIT License</p>
+    </footer>
+
+  </main>
+  </div>
+  </main>
+
+  <script>
+    // === Menu ===
+    function toggleMenu() {
+      var dropdown = document.getElementById('vizMenuDropdown');
+      if (dropdown) dropdown.classList.toggle('open');
+    }
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.viz-menu')) {
+        var dropdown = document.getElementById('vizMenuDropdown');
+        if (dropdown) dropdown.classList.remove('open');
+      }
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        var dropdown = document.getElementById('vizMenuDropdown');
+        if (dropdown) dropdown.classList.remove('open');
+      }
+    });
+
+    // === Theme (class-based, OS detection on first visit) ===
+    var savedTheme = localStorage.getItem('viz-theme');
+    var currentTheme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    function applyTheme(t) {
+      document.documentElement.className = 'theme-' + t;
+      document.getElementById('themeIcon').textContent = t === 'dark' ? '🌙' : '☀️';
+      document.getElementById('themeLabel').textContent = t === 'dark' ? 'Dark' : 'Light';
+      localStorage.setItem('viz-theme', t);
+      currentTheme = t;
+    }
+    function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
+    applyTheme(currentTheme);
+
+    // === Scroll Reveal ===
+    document.querySelectorAll('[data-reveal]').forEach(function(el) { el.classList.add('reveal'); });
+    var revealObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(function(el) { revealObserver.observe(el); });
+
+    // === Download PNG ===
+    async function downloadImage() {
+      var menu = document.querySelector('.viz-menu');
+      menu.style.display = 'none';
+      try {
+        var url = await htmlToImage.toPng(document.body, { quality: 1, pixelRatio: 2, filter: function(n) { return !n.classList || !n.classList.contains('viz-menu'); } });
+        var a = document.createElement('a'); a.href = url;
+        a.download = document.title.replace(/\s+/g, '-').toLowerCase() + '.png'; a.click();
+      } catch(e) { console.error('Download failed:', e); }
+      menu.style.display = '';
+    }
+  </script>
+</body>
+</html>
