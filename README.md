@@ -25,7 +25,7 @@ npx skills add https://github.com/dEitY719/claude-plugin-visuals
 
 | Plugin | Description | Version |
 |--------|-------------|---------|
-| [`visuals`](./plugins/visuals) | Two skills: **`visualize`** (self-contained HTML decks, infographics, dashboards) and **`excalidraw-diagram`** (Excalidraw architecture/concept diagrams). See its [README](./plugins/visuals/skills/excalidraw-diagram/README.md) for VSCode setup. | `0.4.0` |
+| [`visuals`](./plugins/visuals) | Two skills: **`visualize`** (self-contained HTML decks, infographics, dashboards — [visual guide ↗](https://deity719.github.io/claude-plugin-visuals/skill-guides/visualize.html)) and **`excalidraw-diagram`** (Excalidraw architecture/concept diagrams — [visual guide ↗](https://deity719.github.io/claude-plugin-visuals/skill-guides/excalidraw-diagram.html)). See the excalidraw-diagram [README](./plugins/visuals/skills/excalidraw-diagram/README.md) for VSCode setup, or a real [usage example ↗](./docs/skill-output/excalidraw-diagram-usage.md) (prompt → diagram). | `0.4.0` |
 
 ## Repository structure
 
@@ -39,11 +39,6 @@ npx skills add https://github.com/dEitY719/claude-plugin-visuals
 2. Add skill files under `plugins/<name>/skills/<name>/`
 3. Append an entry to `.claude-plugin/marketplace.json` → `plugins[]`
 4. Update the table above
-
-## Credits
-
-- `visualize` — by [careerhackeralex](https://github.com/careerhackeralex), MIT.
-- `excalidraw-diagram` — by [coleam00](https://github.com/coleam00/excalidraw-diagram-skill), MIT.
 
 ## License
 
