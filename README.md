@@ -23,9 +23,9 @@ npx skills add https://github.com/dEitY719/claude-plugin-visuals
 
 ## Available plugins
 
-| Plugin | Description | Version |
-|--------|-------------|---------|
-| [`visuals`](./plugins/visuals) | Two skills: **`visualize`** (self-contained HTML decks, infographics, dashboards — [visual guide ↗](https://deity719.github.io/claude-plugin-visuals/skill-guides/visualize.html)) and **`excalidraw-diagram`** (Excalidraw architecture/concept diagrams — [visual guide ↗](https://deity719.github.io/claude-plugin-visuals/skill-guides/excalidraw-diagram.html)). See the excalidraw-diagram [README](./plugins/visuals/skills/excalidraw-diagram/README.md) for VSCode setup, or a real [usage example ↗](./docs/skill-output/excalidraw-diagram-usage.md) (prompt → diagram). | `0.4.0` |
+- [`visuals`](./plugins/visuals) `v0.4.0` — two skills:
+  - **`visualize`** — self-contained HTML decks, infographics, dashboards ([visual guide ↗](https://deity719.github.io/claude-plugin-visuals/skill-guides/visualize.html))
+  - **`excalidraw-diagram`** — Excalidraw architecture/concept diagrams ([visual guide ↗](https://deity719.github.io/claude-plugin-visuals/skill-guides/excalidraw-diagram.html)). See the [README](./plugins/visuals/skills/excalidraw-diagram/README.md) for VSCode setup, or a real [usage example ↗](https://deity719.github.io/claude-plugin-visuals/skill-output/excalidraw-diagram-usage.html) (prompt → diagram).
 
 ## Repository structure
 
@@ -38,7 +38,7 @@ npx skills add https://github.com/dEitY719/claude-plugin-visuals
 1. Create `plugins/<name>/.claude-plugin/plugin.json`
 2. Add skill files under `plugins/<name>/skills/<name>/`
 3. Append an entry to `.claude-plugin/marketplace.json` → `plugins[]`
-4. Update the table above
+4. Update the list above
 
 ## License
 
