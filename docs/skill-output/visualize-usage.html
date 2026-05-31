@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ko" class="theme-light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>visualize 사용 결과 — Markdown to HTML</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { interpolate-size: allow-keywords; }
+
+    /* ===== THEMES (class-based ONLY) ===== */
+    html.theme-dark {
+      --bg: #0A0A0A; --surface: #141414; --surface-hover: #1C1C1C;
+      --border: rgba(255,255,255,0.08);
+      --text: #EDEDED; --text-secondary: #888;
+      --accent: #3b82f6; --accent-secondary: #8b5cf6;
+      --positive: #10b981; --negative: #f43f5e; --warning: #f59e0b;
+      --code-bg: #0d0d0d; --code-text: #d4d4d4;
+    }
+    html.theme-light {
+      --bg: #FAFAF9; --surface: #FFFFFF; --surface-hover: #F5F5F4;
+      --border: rgba(0,0,0,0.08);
+      --text: #0f172a; --text-secondary: #64748b;
+      --accent: #2563eb; --accent-secondary: #7c3aed;
+      --positive: #059669; --negative: #e11d48; --warning: #d97706;
+      --code-bg: #0f172a; --code-text: #e2e8f0;
+    }
+
+    body {
+      font-family: 'Inter', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg); color: var(--text);
+      line-height: 1.65; -webkit-font-smoothing: antialiased;
+      letter-spacing: -0.01em; font-feature-settings: 'cv11', 'ss01';
+      transition: background 0.3s, color 0.3s;
+      scrollbar-gutter: stable;
+    }
+    h1,h2,h3,h4,h5,h6 {
+      color: var(--text); letter-spacing: -0.03em;
+      line-height: 1.12; text-wrap: balance;
+    }
+    h1 { font-weight: 800; font-size: clamp(2.4rem, 6vw, 3.6rem); }
+    h2 { font-weight: 700; font-size: clamp(1.6rem, 4vw, 2.1rem); }
+    h3 { font-weight: 600; font-size: 1.5rem; }
+    body, p, li, td, th, span, label { font-weight: 400; }
+    p,li,td,th,span,label { color: var(--text); }
+    .text-secondary { color: var(--text-secondary); }
+    code, .mono { font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+    /* ===== LAYOUT ===== */
+    .wrap { max-width: 980px; margin: 0 auto; padding: 0 24px; }
+    section { padding: 56px 0; }
+    .hero { padding: 88px 0 56px; text-align: center; }
+
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.8rem; font-weight: 600; letter-spacing: 0.04em;
+      text-transform: uppercase; color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 12%, transparent);
+      padding: 6px 14px; border-radius: 999px; margin-bottom: 24px;
+    }
+    .hero p.lead {
+      font-size: clamp(1.05rem, 2.4vw, 1.25rem);
+      color: var(--text-secondary); max-width: 680px;
+      margin: 22px auto 0; line-height: 1.7;
+    }
+    .hero .lead b { color: var(--text); font-weight: 600; }
+
+    /* ===== CARD ===== */
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 28px;
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+    .card:hover {
+      box-shadow: 0 0 0 1px var(--border), 0 12px 28px rgba(0,0,0,0.10);
+      transform: translateY(-2px);
+    }
+
+    /* ===== FLOW DIAGRAM ===== */
+    .flow {
+      display: flex; align-items: stretch; justify-content: center;
+      gap: 0; flex-wrap: wrap; margin-top: 16px;
+    }
+    .flow-node {
+      flex: 1 1 0; min-width: 180px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 26px 20px; text-align: center;
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .flow-node:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0,0,0,0.10); }
+    .flow-node.center {
+      border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+      background: color-mix(in srgb, var(--accent) 7%, var(--surface));
+    }
+    .flow-ico {
+      width: 52px; height: 52px; border-radius: 13px;
+      display: flex; align-items: center; justify-content: center;
+      background: color-mix(in srgb, var(--accent) 14%, transparent);
+      color: var(--accent);
+    }
+    .flow-node.center .flow-ico { background: var(--accent); color: #fff; }
+    .flow-node .ftitle { font-weight: 700; font-size: 1.05rem; }
+    .flow-node .fsub { font-size: 0.82rem; color: var(--text-secondary); }
+    .flow-node .ftag {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;
+      color: var(--accent-secondary); font-weight: 600;
+    }
+    .flow-arrow {
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-secondary); padding: 0 6px; flex: 0 0 auto;
+    }
+    .flow-arrow svg { width: 34px; height: 34px; }
+    @media (max-width: 720px) {
+      .flow { flex-direction: column; }
+      .flow-arrow { transform: rotate(90deg); padding: 4px 0; }
+    }
+
+    /* ===== CODE BLOCK ===== */
+    .codeblock {
+      background: var(--code-bg); border-radius: 12px;
+      padding: 18px 20px; overflow-x: auto;
+      border: 1px solid var(--border); margin-top: 14px;
+    }
+    .codeblock code {
+      color: var(--code-text); font-size: 0.92rem; white-space: pre;
+      display: block; line-height: 1.7;
+    }
+    .codeblock .tok-cmd { color: #7dd3fc; font-weight: 600; }
+    .codeblock .tok-arg { color: #fcd34d; }
+    .codeblock .tok-dim { color: #94a3b8; }
+
+    /* ===== SECTION HEADER ===== */
+    .sec-head { display: flex; align-items: center; gap: 16px; margin-bottom: 22px; }
+    .sec-num {
+      flex: 0 0 auto; width: 44px; height: 44px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 1.15rem; color: #fff;
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+    }
+
+    /* ===== KEY-VALUE LIST ===== */
+    .kv { list-style: none; display: grid; gap: 12px; margin-top: 4px; }
+    .kv li { display: flex; gap: 12px; align-items: flex-start; }
+    .kv .dot {
+      flex: 0 0 auto; width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent); margin-top: 9px;
+    }
+    .inline-code {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.86em;
+      background: var(--surface-hover); border: 1px solid var(--border);
+      padding: 2px 7px; border-radius: 6px; color: var(--accent-secondary);
+      word-break: break-all;
+    }
+
+    /* ===== OUTPUT FILE PILL ===== */
+    .file-pill {
+      display: inline-flex; align-items: center; gap: 12px;
+      background: color-mix(in srgb, var(--positive) 10%, var(--surface));
+      border: 1px solid color-mix(in srgb, var(--positive) 35%, transparent);
+      border-radius: 12px; padding: 14px 18px; margin-top: 16px;
+      text-decoration: none; color: var(--text);
+      font-family: 'JetBrains Mono', monospace; font-weight: 600;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .file-pill:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.10); }
+    .file-pill .badge {
+      color: var(--positive); display: flex; align-items: center;
+    }
+
+    /* ===== CALLOUT ===== */
+    .callout {
+      border-left: 4px solid var(--accent);
+      background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+      border-radius: 0 12px 12px 0; padding: 20px 24px;
+      font-size: 1.05rem; line-height: 1.7;
+    }
+    .callout b { color: var(--accent); }
+
+    footer { text-align: center; padding: 48px 0 64px; color: var(--text-secondary); font-size: 0.85rem; }
+
+    /* ===== ANIMATIONS ===== */
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .animate { animation: fadeInUp 0.6s ease-out both; }
+    .animate.delay-1 { animation-delay: 0.1s; }
+    .animate.delay-2 { animation-delay: 0.2s; }
+    .animate.delay-3 { animation-delay: 0.3s; }
+    .animate.delay-4 { animation-delay: 0.4s; }
+    .animate.delay-5 { animation-delay: 0.5s; }
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+
+    /* ===== PRINT ===== */
+    @media print {
+      body { background: white !important; color: black !important; }
+      .viz-menu, .reveal { display: revert; opacity: 1 !important; transform: none !important; }
+      .card, .flow-node { break-inside: avoid; border: 1px solid #ddd; box-shadow: none; }
+      * { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+    @page { margin: 1in; @bottom-center { content: "Page " counter(page); font-size: 9pt; color: #666; } }
+
+    /* ===== MENU ===== */
+    .viz-menu { position: fixed; top: 16px; right: 16px; z-index: 9999; }
+    .viz-menu-toggle {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--text); cursor: pointer; display: flex;
+      align-items: center; justify-content: center;
+      backdrop-filter: blur(12px); transition: all 0.2s;
+    }
+    .viz-menu-toggle:hover { background: var(--surface-hover); }
+    .viz-menu-dropdown {
+      position: absolute; top: 52px; right: 0; min-width: 200px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 8px;
+      opacity: 0; visibility: hidden; transform: translateY(-8px);
+      transition: all 0.2s; backdrop-filter: blur(16px);
+    }
+    .viz-menu-dropdown.open { opacity: 1; visibility: visible; transform: translateY(0); }
+    .viz-menu-dropdown button {
+      width: 100%; padding: 10px 14px; border: none; border-radius: 8px;
+      background: transparent; color: var(--text); font-size: 14px;
+      font-family: inherit; cursor: pointer; text-align: left;
+      display: flex; align-items: center; gap: 10px; transition: background 0.15s;
+    }
+    .viz-menu-dropdown button:hover { background: var(--surface-hover); }
+
+    .skip-to-content {
+      position: absolute; top: -40px; left: 6px; background: var(--accent);
+      color: white; padding: 8px 12px; text-decoration: none;
+      border-radius: 4px; opacity: 0; pointer-events: none;
+      transition: all 0.2s; z-index: 10000;
+    }
+    .skip-to-content:focus { top: 6px; opacity: 1; pointer-events: auto; }
+  </style>
+</head>
+<body>
+  <!-- MENU -->
+  <div class="viz-menu">
+    <button class="viz-menu-toggle" onclick="toggleMenu()" aria-label="메뉴 열기">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="3" y1="5" x2="17" y2="5"/><line x1="3" y1="10" x2="17" y2="10"/><line x1="3" y1="15" x2="17" y2="15"/>
+      </svg>
+    </button>
+    <div class="viz-menu-dropdown" id="vizMenuDropdown">
+      <button onclick="cycleTheme()" aria-label="테마 전환"><span id="themeIcon">☀️</span><span id="themeLabel">Light</span></button>
+      <button onclick="downloadImage()" aria-label="PNG 다운로드"><span>📥</span><span>Download PNG</span></button>
+      <button onclick="window.print()" aria-label="인쇄 또는 PDF 저장"><span>🖨️</span><span>Print / PDF</span></button>
+    </div>
+  </div>
+
+  <a href="#main-content" class="skip-to-content">본문으로 건너뛰기</a>
+
+  <main id="main-content" role="main">
+
+    <!-- HERO -->
+    <header class="hero">
+      <div class="wrap">
+        <span class="eyebrow animate">visualize 사용 결과</span>
+        <h1 class="animate delay-1">마크다운 한 장을<br>한눈에 읽히는 HTML로</h1>
+        <p class="lead animate delay-2">
+          <b>visualize</b> 스킬은 <b>마크다운(<code>.md</code>) 문서를 입력으로 받아</b>,
+          별도 의존성 없이 브라우저에서 바로 열리는 <b>자체 완결형 HTML(<code>.html</code>) 산출물</b>을 생성합니다.
+        </p>
+      </div>
+    </header>
+
+    <!-- FLOW DIAGRAM -->
+    <section aria-label="처리 흐름">
+      <div class="wrap">
+        <div class="flow" data-reveal>
+          <div class="flow-node">
+            <div class="flow-ico" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h5"/>
+              </svg>
+            </div>
+            <div class="ftitle">마크다운 문서</div>
+            <div class="ftag">.md</div>
+            <div class="fsub">평범한 텍스트 입력</div>
+          </div>
+
+          <div class="flow-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+
+          <div class="flow-node center">
+            <div class="flow-ico" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21.4 8 14 2 9.4h7.6z"/>
+              </svg>
+            </div>
+            <div class="ftitle">/visuals-visualize</div>
+            <div class="ftag">변환 스킬</div>
+            <div class="fsub">내용을 시각 자료로</div>
+          </div>
+
+          <div class="flow-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </div>
+
+          <div class="flow-node">
+            <div class="flow-ico" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+              </svg>
+            </div>
+            <div class="ftitle">HTML 산출물</div>
+            <div class="ftag">.html</div>
+            <div class="fsub">단일 파일, 오프라인 OK</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 1 -->
+    <section aria-labelledby="s1">
+      <div class="wrap">
+        <div class="card" data-reveal>
+          <div class="sec-head">
+            <span class="sec-num" aria-hidden="true">1</span>
+            <h2 id="s1">실행한 명령</h2>
+          </div>
+          <p class="text-secondary" style="margin-bottom:6px;">범용 형식</p>
+          <div class="codeblock"><code><span class="tok-cmd">/visuals-visualize</span> <span class="tok-arg">&lt;마크다운-문서-경로&gt;</span></code></div>
+          <p class="text-secondary" style="margin:20px 0 6px;">이번 예시</p>
+          <div class="codeblock"><code><span class="tok-cmd">/visuals-visualize</span> <span class="tok-arg">plugins/visuals/skills/visualize/SKILL.md</span></code></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2 -->
+    <section aria-labelledby="s2">
+      <div class="wrap">
+        <div class="card" data-reveal>
+          <div class="sec-head">
+            <span class="sec-num" aria-hidden="true">2</span>
+            <h2 id="s2">입력 — 마크다운 문서</h2>
+          </div>
+          <ul class="kv">
+            <li><span class="dot" aria-hidden="true"></span><span><b>입력 파일:</b> <span class="inline-code">plugins/visuals/skills/visualize/SKILL.md</span></span></li>
+            <li><span class="dot" aria-hidden="true"></span><span><code>visualize</code> 스킬의 정의가 담긴 평범한 마크다운 문서입니다.</span></li>
+            <li><span class="dot" aria-hidden="true"></span><span>어떤 마크다운 문서든 입력으로 넣을 수 있습니다 — 위 파일은 하나의 예시일 뿐입니다.</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3 -->
+    <section aria-labelledby="s3">
+      <div class="wrap">
+        <div class="card" data-reveal>
+          <div class="sec-head">
+            <span class="sec-num" aria-hidden="true">3</span>
+            <h2 id="s3">결과 — HTML 산출물</h2>
+          </div>
+          <p>위 명령을 실행하면, 입력 마크다운에 대응하는 <b>자체 완결형 HTML output</b>이 생성됩니다.</p>
+          <a class="file-pill" href="../skill-guides/visualize.html">
+            <span class="badge" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+            </span>
+            docs/skill-guides/visualize.html
+          </a>
+          <ul class="kv" style="margin-top:18px;">
+            <li><span class="dot" aria-hidden="true"></span><span>별도 의존성 없이 브라우저에서 바로 열어볼 수 있는 <b>단일 HTML 파일</b>입니다.</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- CALLOUT -->
+    <section aria-label="요약">
+      <div class="wrap">
+        <div class="callout" data-reveal>
+          마크다운 문서 한 장을, 한눈에 읽히는 <b>시각 자료(HTML)</b>로 바꿔주는 것이
+          <code>visualize</code> 스킬의 역할입니다.
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="wrap">visualize usage example · Markdown → HTML</div>
+    </footer>
+
+  </main>
+
+  <script>
+    // === Menu ===
+    function toggleMenu() {
+      var dropdown = document.getElementById('vizMenuDropdown');
+      if (dropdown) dropdown.classList.toggle('open');
+    }
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.viz-menu')) {
+        var dropdown = document.getElementById('vizMenuDropdown');
+        if (dropdown) dropdown.classList.remove('open');
+      }
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        var dropdown = document.getElementById('vizMenuDropdown');
+        if (dropdown) dropdown.classList.remove('open');
+      }
+    });
+
+    // === Theme ===
+    var savedTheme = localStorage.getItem('viz-theme');
+    var currentTheme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    function applyTheme(t) {
+      document.documentElement.className = 'theme-' + t;
+      document.getElementById('themeIcon').textContent = t === 'dark' ? '🌙' : '☀️';
+      document.getElementById('themeLabel').textContent = t === 'dark' ? 'Dark' : 'Light';
+      localStorage.setItem('viz-theme', t);
+      currentTheme = t;
+    }
+    function cycleTheme() { applyTheme(currentTheme === 'dark' ? 'light' : 'dark'); }
+    applyTheme(currentTheme);
+
+    // === Scroll Reveal ===
+    document.querySelectorAll('[data-reveal]').forEach(function(el) { el.classList.add('reveal'); });
+    var revealObserver = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(function(el) { revealObserver.observe(el); });
+
+    // === Download PNG ===
+    async function downloadImage() {
+      var menu = document.querySelector('.viz-menu');
+      menu.style.display = 'none';
+      try {
+        var url = await htmlToImage.toPng(document.body, { quality: 1, pixelRatio: 2, filter: function(n) { return !n.classList || !n.classList.contains('viz-menu'); } });
+        var a = document.createElement('a'); a.href = url;
+        a.download = document.title.replace(/\s+/g, '-').toLowerCase() + '.png'; a.click();
+      } catch(e) { console.error('Download failed:', e); }
+      menu.style.display = '';
+    }
+  </script>
+</body>
+</html>
