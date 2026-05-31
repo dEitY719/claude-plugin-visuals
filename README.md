@@ -24,7 +24,7 @@ npx skills add https://github.com/dEitY719/claude-plugin-visuals
 ## Available plugins
 
 - [`visuals`](./plugins/visuals) `v0.4.0` — two skills:
-  - **`visualize`** — self-contained HTML decks, infographics, dashboards ([visual guide ↗](https://deity719.github.io/claude-plugin-visuals/skill-guides/visualize.html))
+  - **`visualize`** — self-contained HTML decks, infographics, dashboards ([visual guide ↗](https://deity719.github.io/claude-plugin-visuals/skill-guides/visualize.html)). Or a real [usage example ↗](https://deity719.github.io/claude-plugin-visuals/skill-output/visualize-usage.html) (markdown → HTML output).
   - **`excalidraw-diagram`** — Excalidraw architecture/concept diagrams ([visual guide ↗](https://deity719.github.io/claude-plugin-visuals/skill-guides/excalidraw-diagram.html)). See the [README](./plugins/visuals/skills/excalidraw-diagram/README.md) for VSCode setup, or a real [usage example ↗](https://deity719.github.io/claude-plugin-visuals/skill-output/excalidraw-diagram-usage.html) (prompt → diagram).
 
 ## Repository structure
